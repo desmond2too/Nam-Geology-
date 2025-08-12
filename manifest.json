@@ -1,0 +1,41 @@
+{
+  "name": "NAM Geology App",
+  "short_name": "NAM Geology",
+  "description": "Advanced geological mapping and rock identification for Namibia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1E1E1E",
+  "theme_color": "#3a7ca5",
+  "mobile-icons": [
+    {
+      "src": "mobile-icons/gsnlogo-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "mobile-icons/gsnlogo-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "mobile-icons/gsnlogo-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "mobile-icons/gsnlogo-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "mobile-icons/gsnlogo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "mobile-icons/gsnlogo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

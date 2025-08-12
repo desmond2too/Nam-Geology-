@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAM Geology - Rock Identifier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3a7ca5;
+            --secondary-color: #2f6690;
+            --dark-bg: #1a1a2e;
+            --darker-bg: #16213e;
+            --light-text: #e6e6e6;
+            --lighter-text: #ffffff;
+            --accent-color: #f7b538;
+            --warning-bg: #3a2a2a;
+            --warning-border: #d32f2f;
+            --success-color: #4caf50;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a6ca4 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .back-arrow {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid white;
+            color: #fffb08;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-arrow:hover {
+            background-color: white;
+            color: #2f6690;
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-arrow::before {
+            content: '←';
+            font-weight: bold;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .disclaimer {
+            background: #e7e8e9;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+        }
+
+        .disclaimer h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .disclaimer p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .rock-id-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark-bg);
+        }
+        
+        h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+        
+        .rock-id-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .rock-id-tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            background-color: transparent;
+            color: #666;
+            border: none;
+            border-radius: 0;
+            margin-right: 5px;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .rock-id-tab:hover {
+            color: var(--primary-color);
+        }
+        
+        .rock-id-tab.active {
+            color: var(--primary-color);
+        }
+        
+        .rock-id-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-color);
+        }
+        
+        .rock-id-content {
+            display: none;
+            padding: 25px 0;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .rock-id-content.active {
+            display: block;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            cursor: pointer;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: #f0f7fc;
+        }
+        
+        .upload-area::before {
+            content: '📷';
+            font-size: 40px;
+            display: block;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+        
+        .upload-area p {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .upload-subtitle {
+            font-size: 14px;
+            color: #888;
+            font-style: italic;
+            margin: 0;
+        }
+        
+        #rock-image-preview {
+            max-width: 100%;
+            max-height: 350px;
+            margin: 20px 0;
+            display: none;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        
+        /* Enhanced Results Section */
+        .results-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .results-content {
+            text-align: center;
+            color: #666;
+        }
+
+        .results-placeholder {
+            font-size: 1.1em;
+            margin: 20px 0;
+            color: #666;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .rock-result {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        .rock-name {
+            font-size: 1.5em;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .rock-confidence {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .rock-characteristics {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .rock-detail {
+            margin-bottom: 15px;
+        }
+
+        .rock-detail-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .report-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            color: #333;
+            border-radius: 6px;
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #analyze-rock {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        #analyze-rock:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        #location-info {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        #location-info p {
+            margin: 0;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        #current-coords {
+            font-weight: normal;
+            color: var(--primary-color);
+        }
+        
+        #report-confirmation {
+            background-color: #f0fff0;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid var(--success-color);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        #report-confirmation h4 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            background: #f8f9fa;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .feedback-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .feedback-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .feedback-form .form-group {
+            margin-bottom: 0;
+        }
+
+        .rating-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feedback-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .feedback-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .feedback-confirmation {
+            background-color: #f0fff0;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid var(--success-color);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .feedback-confirmation h4 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .rock-id-container {
+                padding: 20px;
+            }
+            
+            .report-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            .rock-id-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .rock-id-tab {
+                flex: 1;
+                text-align: center;
+                padding: 10px 5px;
+                font-size: 14px;
+            }
+            
+            #location-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            #get-location {
+                margin-top: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .back-arrow {
+                left: 15px;
+                width: 50px;
+                height: 50px;
+                font-size: 40px;
+            }
+
+            .header-title {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .rating-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-arrow" title="Return to Main Application"></a>
+            <div class="header-content">
+                <div class="header-title">
+                    <img src="Images\gsnlogo.png" alt="GSN Logo" class="logo">
+                    <h1>NAM Geology Rock Identifier</h1>
+                </div>
+                <p>Advanced AI-powered rock and mineral identification system</p>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <h3>⚠️ Important Disclaimer</h3>
+            <p>This automated rock identification system is a tool designed to assist in geological analysis and should not be considered 100% accurate. Results are based on image analysis and location data, but geological identification requires professional expertise. For critical geological assessments, please consult with qualified geologists. The system is intended for educational and preliminary identification purposes only.</p>
+        </div>
+
+        <div class="rock-id-container">
+            <div class="rock-id-tabs">
+                <button class="rock-id-tab active" data-tab="identify">Identify Rock</button>
+                <button class="rock-id-tab" data-tab="report">Report to GSN</button>
+            </div>
+            
+            <div id="identify" class="rock-id-content active">
+                <div class="upload-area" id="upload-area">
+                    <p>Drag & drop rock images here or click to browse</p>
+                    <p class="upload-subtitle">Upload at least two pictures for better results</p>
+                    <input type="file" id="rock-image" accept="image/*" multiple style="display: none;">
+                    <img id="rock-image-preview" alt="Rock image preview">
+                </div>
+                
+                <div id="location-info">
+                    <p>Current location: <span id="current-coords">Not available</span></p>
+                    <button id="get-location">Get My Location</button>
+                </div>
+                
+                <button id="analyze-rock" disabled>Analyze Rock Sample</button>
+                
+                <div class="results-section">
+                    <h2 style="font-size: 1.5em; margin-bottom: 15px; text-align: center;">Analysis Results</h2>
+                    <div class="results-content" id="resultsContent">
+                        <div class="results-placeholder">
+                            <p>Upload rock images to see identification results</p>
+                        </div>
+                    </div>
+                    
+                    <div class="loading" id="loadingSpinner">
+                        <div class="spinner"></div>
+                        <p>Analyzing rock sample...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="report" class="rock-id-content">
+                <h3>Report a Rock to GSN</h3>
+                <p style="color: #666; margin-bottom: 25px;">Submit detailed information about a rock for expert analysis by the Geological Survey of Namibia.</p>
+                
+                <div class="report-form">
+                    <div class="form-group">
+                        <label for="report-image">Rock Image</label>
+                        <input type="file" id="report-image" accept="image/*" multiple>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="report-location">Location (coordinates)</label>
+                        <input type="text" id="report-location" placeholder="e.g., -22.5609, 17.0658">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="report-name">Your Name</label>
+                        <input type="text" id="report-name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="report-email">Email</label>
+                        <input type="email" id="report-email">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="report-notes">Additional Notes</label>
+                        <textarea id="report-notes" rows="4" placeholder="Describe the rock's location, size, and any other relevant details..."></textarea>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <button id="submit-report">Submit Report</button>
+                    </div>
+                </div>
+                
+                <div id="report-confirmation">
+                    <h4>Thank you for your report!</h4>
+                    <p>Your rock sample has been submitted to the Geological Survey of Namibia for analysis.</p>
+                    <p>You will receive feedback within 5 working days at the email address you provided.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h4>Share Your Feedback</h4>
+            <div class="feedback-form">
+                
+                <div class="form-group">
+                    
+                    <textarea id="feedback-comments" rows="4" placeholder="Tell us about your experience with the rock identifier..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <button class="feedback-submit" id="submit-feedback">Submit Feedback</button>
+                </div>
+            </div>
+            
+            <div class="feedback-confirmation" id="feedback-confirmation">
+                <h4>Thank you for your feedback!</h4>
+                <p>Your feedback has been submitted and will help us improve the NAM Geology Rock Identifier.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_KEY = "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";
+        const API_ENDPOINT = "https://models.github.ai/inference";
+
+        // Tab switching functionality
+        document.querySelectorAll('.rock-id-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.rock-id-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.rock-id-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Image upload functionality
+        const uploadArea = document.getElementById('upload-area');
+        const rockImageInput = document.getElementById('rock-image');
+        const rockImagePreview = document.getElementById('rock-image-preview');
+        const analyzeBtn = document.getElementById('analyze-rock');
+        
+        uploadArea.addEventListener('click', () => rockImageInput.click());
+        
+        rockImageInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    rockImagePreview.src = event.target.result;
+                    rockImagePreview.style.display = 'block';
+                    analyzeBtn.disabled = false;
+                    uploadArea.style.padding = '20px';
+                    
+                    // Update upload area text based on number of files
+                    const uploadText = uploadArea.querySelector('p:first-child');
+                    if (files.length === 1) {
+                        uploadText.textContent = `${files.length} image uploaded - add more for better results`;
+                    } else {
+                        uploadText.textContent = `${files.length} images uploaded`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--primary-color)';
+            uploadArea.style.backgroundColor = '#f0f7fc';
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '#f9f9f9';
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#ccc';
+            uploadArea.style.backgroundColor = '#f9f9f9';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                rockImageInput.files = files;
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    rockImagePreview.src = event.target.result;
+                    rockImagePreview.style.display = 'block';
+                    analyzeBtn.disabled = false;
+                    uploadArea.style.padding = '20px';
+                    
+                    // Update upload area text based on number of files
+                    const uploadText = uploadArea.querySelector('p:first-child');
+                    if (files.length === 1) {
+                        uploadText.textContent = `${files.length} image uploaded - add more for better results`;
+                    } else {
+                        uploadText.textContent = `${files.length} images uploaded`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Location functionality
+        document.getElementById('get-location').addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const coords = `${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`;
+                        document.getElementById('current-coords').textContent = coords;
+                    },
+                    (error) => {
+                        document.getElementById('current-coords').textContent = 'Location access denied';
+                    }
+                );
+            } else {
+                document.getElementById('current-coords').textContent = 'Geolocation not supported';
+            }
+        });
+        
+        // Enhanced analyze button functionality with AI integration
+        document.getElementById('analyze-rock').addEventListener('click', async () => {
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('resultsContent').innerHTML = '';
+            
+            // Disable button
+            const btn = document.getElementById('analyze-rock');
+            btn.textContent = 'Analyzing...';
+            btn.disabled = true;
+            
+            try {
+                // Get the uploaded image
+                const file = rockImageInput.files[0];
+                if (!file) {
+                    throw new Error('No image uploaded');
+                }
+                
+                // Convert image to base64
+                const base64Image = await getBase64(file);
+                
+                // Prepare the prompt for the AI
+                const location = document.getElementById('current-coords').textContent;
+                const locationContext = location !== 'Not available' && location !== 'Location access denied' && location !== 'Geolocation not supported' 
+                    ? `The rock was found at these coordinates: ${location}.` 
+                    : '';
+                
+                const prompt = `Analyze this rock image and provide a detailed identification. ${locationContext} 
+                Provide the following information in a structured format:
+                
+                **Rock Identification:**
+                - Most likely rock type: [provide the specific name]
+                - Confidence level: [provide percentage]
+                
+                **Characteristics:**
+                - Texture: [describe]
+                - Grain size: [describe]
+                - Color: [describe]
+                - Other notable features: [describe]
+                
+                **Geological Information:**
+                - Formation process: [describe how this rock forms]
+                - Common locations in Namibia: [list areas where found]
+                - Age range: [if determinable]
+                
+                **Additional Information:**
+                - Special properties: [describe any unique properties]
+                - Common uses: [describe typical uses]
+                - Similar rocks: [list similar rocks that might be confused with this one]
+                
+                Format your response with clear headings for each section and bullet points for details.`;
+                
+                // Call the AI API
+                const response = await callPhi4MultimodalAPI(base64Image, prompt);
+                
+                // Display the results
+                displayAIResults(response);
+            } catch (error) {
+                console.error('Error analyzing rock:', error);
+                document.getElementById('resultsContent').innerHTML = `
+                    <div class="rock-result">
+                        <div class="rock-name">Analysis Error</div>
+                        <div class="rock-characteristics">
+                            We encountered an error while analyzing your rock sample. Please try again with a clearer image.
+                            <br><br>Error details: ${error.message}
+                        </div>
+                    </div>
+                `;
+            } finally {
+                // Hide loading spinner
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+                // Reset button
+                btn.textContent = 'Re-analyze Rock Sample';
+                btn.disabled = false;
+            }
+        });
+        
+        // Helper function to convert file to base64
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        // Function to call the Phi-4 Multimodal API
+        async function callPhi4MultimodalAPI(base64Image, prompt) {
+            const response = await fetch(API_ENDPOINT + '/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${API_KEY}`
+                },
+                body: JSON.stringify({
+                    messages: [
+                        { 
+                            role: "user", 
+                            content: [
+                                { type: "text", text: prompt },
+                                { type: "image_url", image_url: { url: `data:image/jpeg;base64,${base64Image}` } }
+                            ]
+                        }
+                    ],
+                    model: "microsoft/Phi-4-multimodal-instruct",
+                    temperature: 0.7,
+                    max_tokens: 1500,
+                    top_p: 0.9
+                })
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'API request failed');
+            }
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+        
+        // Function to extract rock name from AI response
+        function extractRockName(aiResponse) {
+            // Try to find the rock name in common patterns
+            const namePatterns = [
+                /Most likely rock type:\s*([^\n]+)/i,
+                /Rock Identification[^:]*:\s*([^\n]+)/i,
+                /Rock Type[^:]*:\s*([^\n]+)/i,
+                /The rock is (?:most likely )?(?:a |an )?([^\n.,;]+)/i
+            ];
+            
+            for (const pattern of namePatterns) {
+                const match = aiResponse.match(pattern);
+                if (match && match[1]) {
+                    return match[1].trim();
+                }
+            }
+            
+            // Fallback: return the first line that seems to name the rock
+            const lines = aiResponse.split('\n');
+            for (const line of lines) {
+                if (line.toLowerCase().includes('rock') || line.toLowerCase().includes('stone')) {
+                    return line.trim();
+                }
+            }
+            
+            return "Unidentified Rock";
+        }
+        
+        // Function to extract confidence percentage from AI response
+        function extractConfidence(aiResponse) {
+            const confidencePatterns = [
+                /confidence(?: level)?[^:]*:\s*([0-9]+%)/i,
+                /([0-9]+%) confidence/i,
+                /with ([0-9]+%) certainty/i
+            ];
+            
+            for (const pattern of confidencePatterns) {
+                const match = aiResponse.match(pattern);
+                if (match && match[1]) {
+                    return match[1];
+                }
+            }
+            
+            return "Moderate confidence";
+        }
+        
+        // Function to display AI results in a structured format
+        function displayAIResults(aiResponse) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            // Extract rock name and confidence
+            const rockName = extractRockName(aiResponse);
+            const confidence = extractConfidence(aiResponse);
+            
+            // Create structured HTML for the results
+            let html = `
+                <div class="rock-result">
+                    <div class="rock-name">
+                        ${rockName}
+                        <span class="rock-confidence">${confidence}</span>
+                    </div>
+                    <div class="rock-characteristics">
+                        ${formatAIResponse(aiResponse)}
+                    </div>
+                </div>
+                <button id="report-rock" style="margin-top: 20px; width: 100%;">Report to GSN for Verification</button>
+            `;
+            
+            resultsContent.innerHTML = html;
+            
+            // Add event listener for report button
+            document.getElementById('report-rock')?.addEventListener('click', () => {
+                document.querySelector('.rock-id-tab[data-tab="report"]').click();
+                
+                // Auto-fill the location if available
+                const coords = document.getElementById('current-coords').textContent;
+                if (coords && coords !== 'Not available' && coords !== 'Location access denied' && coords !== 'Geolocation not supported') {
+                    document.getElementById('report-location').value = coords;
+                }
+            });
+        }
+        
+        // Function to format the AI response into HTML
+        function formatAIResponse(response) {
+            // Convert markdown-like headings to HTML
+            let formatted = response
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold text
+                .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic text
+                .replace(/\n\s*\n/g, '\n') // Remove extra newlines
+                .replace(/\n/g, '<br>');   // Convert newlines to <br>
+            
+            // Convert bullet points to HTML lists
+            formatted = formatted.replace(/\s*-\s*(.*?)(<br>|$)/g, '<li>$1</li>');
+            formatted = formatted.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+            
+            // Convert numbered lists
+            formatted = formatted.replace(/\s*\d+\.\s*(.*?)(<br>|$)/g, '<li>$1</li>');
+            formatted = formatted.replace(/(<li>.*?<\/li>)+/g, '<ol>$&</ol>');
+            
+            // Convert section headings
+            formatted = formatted.replace(/<br>\s*([A-Z][A-Za-z ]+):<br>/g, '<br><div class="rock-detail"><span class="rock-detail-title">$1:</span>');
+            formatted = formatted.replace(/<br><\/div>/g, '</div><br>');
+            
+            return formatted;
+        }
+        
+        // Submit report functionality
+        document.getElementById('submit-report').addEventListener('click', () => {
+            // Validate required fields
+            const requiredFields = ['report-image', 'report-location', 'report-email'];
+            let isValid = true;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value && !field.files?.length) {
+                    field.style.borderColor = 'var(--warning-border)';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#ddd';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Show confirmation
+            document.getElementById('report-confirmation').style.display = 'block';
+            document.querySelector('.report-form').style.display = 'none';
+            
+            // Scroll to confirmation
+            document.getElementById('report-confirmation').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Feedback functionality
+        document.getElementById('submit-feedback').addEventListener('click', () => {
+            const feedbackText = document.getElementById('feedback-comments').value;
+            
+            if (!feedbackText) {
+                alert('Please provide some feedback before submitting');
+                return;
+            }
+            
+            // Show confirmation
+            document.getElementById('feedback-confirmation').style.display = 'block';
+            document.querySelector('.feedback-form').style.display = 'none';
+            
+            // Scroll to confirmation
+            document.getElementById('feedback-confirmation').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
