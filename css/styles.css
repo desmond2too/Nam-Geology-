@@ -1187,11 +1187,13 @@ body {
         display: block;
     }
 }
+
+/*Additional */
 @media (max-width: 768px) {
     /* Adjust AI and Rock ID button sizes */
     #ai-button, #rock-identifier-button {
-        height: 30px !important;
-        width: 15px !important;
+        height: 35px !important;
+        width: 20px !important;
     }
     
     /* Adjust AI logo size */
@@ -1211,43 +1213,47 @@ body {
         height: 50px !important;
         width: auto;
     }
+
+
+    /* Adjust base layer control position */
+    .leaflet-control-layers {
+        top: 70px !important;
+        left: auto !important;
+        right: 10px !important;
+    }
+
+     /* Adjust zoom control position */
+    .leaflet-control-zoom {
+        top: 60px !important;
+        left: auto !important;
+        right: 10px !important;
+    }
     
     /* Reposition control buttons */
     #location-button {
-        top: 80px;
+        top: 50px;
         right: 10px;
     }
     
     #identify-button {
-        top: 120px;
+        bottom: 49px;
         right: 10px;
     }
     
     #zoom-extent-button {
-        top: 160px;
+        bottom: 40px;
         right: 10px;
     }
     
-    /* Adjust zoom control position */
-    .leaflet-control-zoom {
-        top: 80px !important;
-        left: auto !important;
-        right: 10px !important;
-    }
-    
+   
     /* Adjust scale control position */
     .custom-scale {
-        bottom: 10px !important;
+        bottom: 30px !important;
         left: 10px !important;
         right: auto !important;
     }
     
-    /* Adjust base layer control position */
-    .leaflet-control-layers {
-        top: 120px !important;
-        left: auto !important;
-        right: 10px !important;
-    }
+    
     
     /* Make sure buttons are properly spaced */
     #location-button, 
