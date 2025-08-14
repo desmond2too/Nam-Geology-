@@ -1083,7 +1083,6 @@ body {
 
 
 
-/* Add these to your existing styles.css */
 
 /* Responsive sidebar */
 @media (max-width: 768px) {
@@ -1188,30 +1187,11 @@ body {
         display: block;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @media (max-width: 768px) {
     /* Adjust AI and Rock ID button sizes */
     #ai-button, #rock-identifier-button {
-        height: 60px !important;
-        width: 35px !important;
+        height: 30px !important;
+        width: 15px !important;
     }
     
     /* Adjust AI logo size */
