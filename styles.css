@@ -1188,3 +1188,142 @@ body {
         display: block;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+    /* Adjust AI and Rock ID button sizes */
+    #ai-button, #rock-identifier-button {
+        height: 60px !important;
+        width: 35px !important;
+    }
+    
+    /* Adjust AI logo size */
+    .ai-logo {
+        width: 30px !important;
+        height: 22px !important;
+    }
+    
+    /* Adjust logo container and logos */
+    #logo-container {
+        bottom: 10px;
+        right: 10px;
+        padding: 3px;
+    }
+    
+    .map-logo {
+        height: 50px !important;
+        width: auto;
+    }
+    
+    /* Reposition control buttons */
+    #location-button {
+        top: 80px;
+        right: 10px;
+    }
+    
+    #identify-button {
+        top: 120px;
+        right: 10px;
+    }
+    
+    #zoom-extent-button {
+        top: 160px;
+        right: 10px;
+    }
+    
+    /* Adjust zoom control position */
+    .leaflet-control-zoom {
+        top: 80px !important;
+        left: auto !important;
+        right: 10px !important;
+    }
+    
+    /* Adjust scale control position */
+    .custom-scale {
+        bottom: 10px !important;
+        left: 10px !important;
+        right: auto !important;
+    }
+    
+    /* Adjust base layer control position */
+    .leaflet-control-layers {
+        top: 120px !important;
+        left: auto !important;
+        right: 10px !important;
+    }
+    
+    /* Make sure buttons are properly spaced */
+    #location-button, 
+    #identify-button, 
+    #zoom-extent-button,
+    .leaflet-control-zoom,
+    .leaflet-control-layers {
+        margin-top: 10px;
+    }
+    
+    /* Adjust identify results panel */
+    #identify-results {
+        top: 200px;
+        right: 10px;
+        width: 200px;
+        max-height: 200px;
+    }
+    
+    
+    /* Make panel controls more compact */
+    #panel-controls {
+        gap: 5px;
+    }
+    
+    .panel-btn {
+        height: 50px;
+    }
+}
+
+/* Additional adjustments for very small screens */
+@media (max-width: 480px) {
+    /* Make buttons even more compact */
+    #ai-button, #rock-identifier-button {
+        height: 50px !important;
+    }
+    
+    /* Further reduce logo size */
+    .map-logo {
+        height: 40px !important;
+    }
+    
+    /* Adjust control positions for very small screens */
+    #location-button {
+        top: 70px;
+    }
+    
+    #identify-button {
+        top: 110px;
+    }
+    
+    #zoom-extent-button {
+        top: 150px;
+    }
+    
+    .leaflet-control-zoom {
+        top: 70px !important;
+    }
+    
+    .leaflet-control-layers {
+        top: 110px !important;
+    }
+    
+    #identify-results {
+        top: 190px;
+    }
+}
